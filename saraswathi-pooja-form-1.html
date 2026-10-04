@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html lang="ta">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>ஞான சரஸ்வதி பூஜை – பதிவு</title>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+Tamil:wght@400;600;700&display=swap" rel="stylesheet">
+<style>
+  /* ===== அமைப்பு: Google Apps Script Web App URL-ஐ கீழே உள்ள script-ல் ஒட்டவும் ===== */
+  :root{
+    --bg:#fff8ec; --card:#ffffff; --primary:#b8860b; --primary-dark:#8a6408;
+    --accent:#c0392b; --text:#2b2118; --muted:#7a6a58; --border:#ead9bd;
+    --ok:#2e7d32; --err:#c62828;
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  body{font-family:'Noto Sans Tamil',sans-serif;background:var(--bg);color:var(--text);
+    min-height:100vh;padding:16px;line-height:1.6}
+  .wrap{max-width:480px;margin:0 auto}
+  header{text-align:center;padding:24px 16px;border-radius:16px;margin-bottom:16px;
+    background:linear-gradient(135deg,#fff3d6,#ffe3a8);border:1px solid var(--border)}
+  header .om{font-size:34px;color:var(--accent)}
+  header h1{font-size:24px;color:var(--primary-dark);margin:4px 0}
+  header .date{display:inline-block;margin-top:6px;background:var(--accent);color:#fff;
+    padding:4px 14px;border-radius:20px;font-size:14px;font-weight:600}
+  form{background:var(--card);border:1px solid var(--border);border-radius:16px;padding:20px}
+  .field{margin-bottom:18px}
+  label{display:block;font-weight:600;margin-bottom:6px;font-size:15px}
+  label .req{color:var(--err)}
+  input,select{width:100%;padding:12px 14px;font-size:16px;font-family:inherit;
+    border:1.5px solid var(--border);border-radius:10px;background:#fffdf8;color:var(--text)}
+  input:focus,select:focus{outline:none;border-color:var(--primary)}
+  .hint{font-size:12px;color:var(--muted);margin-top:4px}
+  .error{font-size:13px;color:var(--err);margin-top:4px;display:none}
+  .field.invalid input,.field.invalid select{border-color:var(--err)}
+  .field.invalid .error{display:block}
+  button{width:100%;padding:14px;font-size:17px;font-weight:700;font-family:inherit;
+    background:var(--primary);color:#fff;border:none;border-radius:12px;cursor:pointer}
+  button:active{background:var(--primary-dark)}
+  button:disabled{opacity:.6}
+  .success{display:none;text-align:center;background:var(--card);border:1px solid var(--border);
+    border-radius:16px;padding:32px 20px}
+  .success .tick{font-size:56px;color:var(--ok)}
+  .success h2{color:var(--ok);margin:8px 0}
+  .success button{margin-top:18px;background:var(--muted)}
+  footer{text-align:center;color:var(--muted);font-size:12px;margin-top:16px}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header>
+    <div class="om">🪷</div>
+    <h1>ஞான சரஸ்வதி பூஜை</h1>
+    <div class="date">18.10.2026 • ஞாயிற்றுக்கிழமை</div>
+  </header>
+
+  <form id="regForm" novalidate>
+    <div class="field">
+      <label for="student">1. மாணவரின் பெயர் <span class="req">*</span></label>
+      <input id="student" name="student" type="text" autocomplete="off">
+      <div class="error">மாணவரின் பெயரை உள்ளிடவும்</div>
+    </div>
+
+    <div class="field">
+      <label for="parent">2. பெற்றோரின் பெயர் <span class="req">*</span></label>
+      <input id="parent" name="parent" type="text" autocomplete="off">
+      <div class="error">பெற்றோரின் பெயரை உள்ளிடவும்</div>
+    </div>
+
+    <div class="field">
+      <label for="std">3. படிக்கும் வகுப்பு <span class="req">*</span></label>
+      <select id="std" name="std">
+        <option value="">— தேர்ந்தெடுக்கவும் —</option>
+        <option>Pre-KG</option><option>LKG</option><option>UKG</option>
+        <option>1</option><option>2</option><option>3</option><option>4</option>
+        <option>5</option><option>6</option><option>7</option><option>8</option>
+        <option>9</option><option>10</option><option>11</option><option>12</option>
+        <option>கல்லூரி</option>
+      </select>
+      <div class="error">வகுப்பைத் தேர்ந்தெடுக்கவும்</div>
+    </div>
+
+    <div class="field">
+      <label for="whatsapp">4. வாட்ஸப் நம்பர் <span class="req">*</span></label>
+      <input id="whatsapp" name="whatsapp" type="tel" inputmode="numeric" maxlength="10" placeholder="10 இலக்க எண்">
+      <div class="error">சரியான 10 இலக்க வாட்ஸப் எண்ணை உள்ளிடவும்</div>
+    </div>
+
+    <div class="field">
+      <label for="area">5. வசிக்கும் பகுதி <span class="req">*</span></label>
+      <input id="area" name="area" type="text" autocomplete="off">
+      <div class="error">வசிக்கும் பகுதியை உள்ளிடவும்</div>
+    </div>
+
+    <button type="submit" id="submitBtn">பதிவு செய்க</button>
+  </form>
+
+  <div class="success" id="success">
+    <div class="tick">✓</div>
+    <h2>பதிவு வெற்றி!</h2>
+    <p id="successMsg"></p>
+    <button onclick="resetForm()">இன்னொரு மாணவரைப் பதிவு செய்ய</button>
+  </div>
+
+  <footer>இல்லம் தோறும் இனிய கீதை</footer>
+</div>
+
+<script>
+  // ⬇️ உங்கள் Google Apps Script Web App URL-ஐ இங்கே ஒட்டவும்
+  const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbwJYJH6KbYxyXq-hlf3DllTPvbhu0y3rcImAuRixpDVPVd_Wa9dnVTWLwIduN8b4HPWsQ/exec";
+
+  const form = document.getElementById('regForm');
+  const btn = document.getElementById('submitBtn');
+  const wa = document.getElementById('whatsapp');
+
+  wa.addEventListener('input', () => { wa.value = wa.value.replace(/\D/g, '').slice(0, 10); });
+
+  function validate() {
+    let ok = true;
+    ['student','parent','std','area'].forEach(id => {
+      const el = document.getElementById(id);
+      const bad = !el.value.trim();
+      el.parentElement.classList.toggle('invalid', bad);
+      if (bad) ok = false;
+    });
+    const badWa = !/^[6-9]\d{9}$/.test(wa.value);
+    wa.parentElement.classList.toggle('invalid', badWa);
+    if (badWa) ok = false;
+    return ok;
+  }
+
+  form.addEventListener('submit', async (e) => {
+    e.preventDefault();
+    if (!validate()) {
+      document.querySelector('.field.invalid')?.scrollIntoView({behavior:'smooth', block:'center'});
+      return;
+    }
+    if (SCRIPT_URL.startsWith('PASTE')) { alert('Google Apps Script URL இன்னும் சேர்க்கப்படவில்லை'); return; }
+
+    btn.disabled = true; btn.textContent = 'பதிவு செய்யப்படுகிறது...';
+    const data = new URLSearchParams(new FormData(form));
+    try {
+      await fetch(SCRIPT_URL, { method: 'POST', mode: 'no-cors', body: data });
+      document.getElementById('successMsg').textContent =
+        `${form.student.value.trim()} அவர்களின் பதிவு பெறப்பட்டது. 18.10.2026 அன்று சந்திப்போம்!`;
+      form.style.display = 'none';
+      document.getElementById('success').style.display = 'block';
+    } catch (err) {
+      alert('இணைய இணைப்பில் பிரச்சனை. மீண்டும் முயற்சிக்கவும்.');
+    } finally {
+      btn.disabled = false; btn.textContent = 'பதிவு செய்க';
+    }
+  });
+
+  function resetForm() {
+    form.reset();
+    document.querySelectorAll('.field').forEach(f => f.classList.remove('invalid'));
+    document.getElementById('success').style.display = 'none';
+    form.style.display = 'block';
+    window.scrollTo({top:0, behavior:'smooth'});
+  }
+</script>
+</body>
+</html>
